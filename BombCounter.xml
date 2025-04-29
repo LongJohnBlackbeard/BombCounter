@@ -1,0 +1,69 @@
+<GuiXml>
+    <Controls>
+      <!-- History panel -->
+      <TopLevelControl name="BT_HistoryContainer"
+                       mouseEnabled="true"
+                       movable="true"
+                       clampedToScreen="true">
+        <Dimensions x="400" y="400"/>
+        <Anchor point="TOPLEFT"
+                relativeTo="GuiRoot"
+                relativePoint="TOPLEFT"
+                offsetX="20" offsetY="200"/>
+        <OnMoveStop>BT_HistoryContainer_MoveStop()</OnMoveStop>
+        <Controls>
+          <Backdrop name="$(parent)_BG"
+                    inherits="ZO_ThinBackdrop"
+                    edgeColor="000000"
+                    centerColor="000000"
+                    alpha="0.5">
+            <AnchorFill/>
+          </Backdrop>
+          <Label name="$(parent)_HistoryLabel"
+                 font="ZoFontChat"
+                 color="CFDCBD"
+                 wrapMode="WORD_WRAP"
+                 verticalAlignment="TOP"
+                 horizontalAlignment="LEFT">
+            <Anchor point="TOPLEFT"
+                    relativeTo="$(parent)_BG"
+                    relativePoint="TOPLEFT"
+                    offsetX="10" offsetY="10"/>
+            <Dimensions x="380" y="380"/>
+          </Label>
+        </Controls>
+      </TopLevelControl>
+  
+      <!-- Popup panel -->
+      <TopLevelControl name="BT_BombPopup"
+                       hidden="true"
+                       mouseEnabled="true"
+                       movable="true"
+                       clampedToScreen="true">
+        <Dimensions x="600" y="200"/>
+        <Anchor point="TOPLEFT"
+                relativeTo="GuiRoot"
+                relativePoint="TOPLEFT"
+                offsetX="300" offsetY="60"/>
+        <OnMoveStop>BT_BombPopup_MoveStop()</OnMoveStop>
+        <Controls>
+          <Backdrop name="$(parent)_BG"
+                    inherits="ZO_ThinBackdrop"
+                    edgeColor="000000"
+                    centerColor="000000"
+                    alpha="0.5">
+            <AnchorFill/>
+          </Backdrop>
+          <Label name="BT_BombPopupLabel"
+                 font="$(BOLD_FONT)|32|thick-outline"
+                 horizontalAlignment="CENTER"
+                 verticalAlignment="CENTER"
+                 color="FFFFFF"
+                 wrapMode="CLIP">
+            <AnchorFill/>
+          </Label>
+        </Controls>
+      </TopLevelControl>
+    </Controls>
+  </GuiXml>
+  
