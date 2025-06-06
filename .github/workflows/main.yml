@@ -36,9 +36,9 @@ jobs:
 
       - name: Replace placeholders with current date
         run: |
-          sed -i "s/version = \"dev\"/version = \"${{ env.ADDON_VERSION }}\"/g" HodorReflexes.lua
-          sed -i "s/## Version: dev/## Version: ${{ env.ADDON_VERSION }}/g" HodorReflexes.addon
-          sed -i "s/## AddOnVersion: 99999999/## AddOnVersion: ${{ env.BUILD_DATE_NUMBER }}/g" HodorReflexes.addon
+          sed -i "s/version = \"dev\"/version = \"${{ env.ADDON_VERSION }}\"/g" BombCounter.lua
+          sed -i "s/## Version: dev/## Version: ${{ env.ADDON_VERSION }}/g" BombCounter.addon
+          sed -i "s/## AddOnVersion: 99999999/## AddOnVersion: ${{ env.BUILD_DATE_NUMBER }}/g" BombCounter.addon
 
       - name: Create ZIP archive
         run: |
