@@ -55,7 +55,11 @@ jobs:
           
           # Make full version zip
           (cd /tmp && zip -r --quiet "$REPO_FOLDER/${{ env.ZIP_FULL_NAME }}" "${{ env.ADDON_NAME }}")
+            - name: Extract latest changelog entry
 
+        run: |
+          awk '/^## / { if (!found) { found=1; print; next } else { exit } } found' CHANGELOG.md > latest_changes.md
+          cat latest_changes.md
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
@@ -65,6 +69,7 @@ jobs:
           tag: "${{ env.ADDON_VERSION }}"
           artifacts: "${{ env.ZIP_FULL_NAME }}"
           artifactContentType: application/zip
+          bodyFile: latest_changes.md
           allowUpdates: true
           makeLatest: true
 
@@ -75,3 +80,4 @@ jobs:
           addon_id: '4099'
           version: ${{ env.ADDON_VERSION }}
           zip_file: ${{ env.ZIP_FULL_NAME }}
+          changelog_file: 'CHANGELOG.md'
