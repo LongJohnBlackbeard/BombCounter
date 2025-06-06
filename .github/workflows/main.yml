@@ -43,19 +43,19 @@ jobs:
           REPO_FOLDER=$(pwd)
           TMP_FOLDER="/tmp/${{ env.ADDON_NAME }}"
           
-          # Define the path to the ignore pattern file
           ignore_file=".build-ignore"
           
-          # Read and process ignore patterns into a single line
-          exclude_patterns=$(cat "$ignore_file" | awk '{print "--exclude " $0}' | tr '\n' ' ')
+          if [ -f "$ignore_file" ]; then
+            exclude_patterns=$(cat "$ignore_file" | awk '{print "--exclude " $0}' | tr '\n' ' ')
+          else
+            exclude_patterns=""
+          fi
           
-          # Make folder and copy content
           mkdir -p $TMP_FOLDER
           rsync -a --quiet $exclude_patterns "$REPO_FOLDER/" "$TMP_FOLDER/"
           
-          # Make full version zip
-          (cd /tmp && zip -r --quiet "$REPO_FOLDER/${{ env.ZIP_FULL_NAME }}" "${{ env.ADDON_NAME }}")
-            - name: Extract latest changelog entry
+          cd /tmp
+          zip -r --quiet "$REPO_FOLDER/${{ env.ZIP_FULL_NAME }}" "${{ env.ADDON_NAME }}"
 
       - name: Extract latest changelog entry
         run: |
