@@ -41,21 +41,24 @@ jobs:
       - name: Create ZIP archive
         run: |
           REPO_FOLDER=$(pwd)
-          TMP_FOLDER="/tmp/${{ env.ADDON_NAME }}"
+          TMP_FOLDER="/tmp/$ADDON_NAME"
           
           ignore_file=".build-ignore"
-          
+
           if [ -f "$ignore_file" ]; then
-            exclude_patterns=$(cat "$ignore_file" | awk '{print "--exclude " $0}' | tr '\n' ' ')
+            exclude_patterns=$(awk '{print "--exclude " $0}' "$ignore_file" | tr '\n' ' ')
           else
             exclude_patterns=""
           fi
-          
-          mkdir -p $TMP_FOLDER
+
+          mkdir -p "$TMP_FOLDER"
           rsync -a --quiet $exclude_patterns "$REPO_FOLDER/" "$TMP_FOLDER/"
-          
+
           cd /tmp
-          zip -r --quiet "$REPO_FOLDER/${{ env.ZIP_FULL_NAME }}" "${{ env.ADDON_NAME }}"
+          zip -r --quiet "$REPO_FOLDER/$ZIP_FULL_NAME" "$ADDON_NAME"
+        env:
+          ADDON_NAME: ${{ env.ADDON_NAME }}
+          ZIP_FULL_NAME: ${{ env.ZIP_FULL_NAME }}
 
       - name: Extract latest changelog entry
         run: |
