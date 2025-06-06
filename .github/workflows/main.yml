@@ -3,7 +3,7 @@ name: ESOUI Release
 on:
   push:
     branches:
-      - release # to be changed to main with schedule
+      - main # to be changed to main with schedule
 
 jobs:
   release:
