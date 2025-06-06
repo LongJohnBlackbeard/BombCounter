@@ -57,6 +57,7 @@ jobs:
           (cd /tmp && zip -r --quiet "$REPO_FOLDER/${{ env.ZIP_FULL_NAME }}" "${{ env.ADDON_NAME }}")
             - name: Extract latest changelog entry
 
+      - name: Extract latest changelog entry
         run: |
           awk '/^## / { if (!found) { found=1; print; next } else { exit } } found' CHANGELOG.md > latest_changes.md
           cat latest_changes.md
