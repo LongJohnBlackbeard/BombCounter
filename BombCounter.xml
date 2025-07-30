@@ -40,7 +40,7 @@
                        mouseEnabled="true"
                        movable="true"
                        clampedToScreen="true">
-        <Dimensions x="600" y="200"/>
+        <Dimensions x="800" y="200"/>
         <Anchor point="TOPLEFT"
                 relativeTo="GuiRoot"
                 relativePoint="TOPLEFT"

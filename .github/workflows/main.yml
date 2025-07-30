@@ -34,10 +34,6 @@ jobs:
           echo "ADDON_VERSION=$version" >> $GITHUB_ENV
           echo "ZIP_FULL_NAME=$zip_name" >> $GITHUB_ENV
 
-      - name: Replace placeholders with current date
-        run: |
-          sed -i "s/version = \"dev\"/version = \"${{ env.ADDON_VERSION }}\"/g" BombCounter.lua
-
       - name: Create ZIP archive
         run: |
           REPO_FOLDER=$(pwd)

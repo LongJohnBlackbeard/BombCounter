@@ -31,6 +31,8 @@ local defaults = {
   popupX          = 300,
   popupY          = 60,
   popupMovable    = false,
+  popupTextSize   = 32,
+  nameSource      = "character"
 }
 
 -- Utility: strip trailing ^Mx/^Fx color codes
@@ -82,11 +84,10 @@ end
 
 -- Toggle popup panel drag mode
 function BC:TogglePopupDrag(on)
-  self.popupCtrl:SetMovable(on)
-  self.popupCtrl:SetMouseEnabled(on)
   self.popupBG:SetHidden(not on)
   self.popupCtrl:SetHidden(not on)
-  self.popupLabel:SetMouseEnabled(false)
+  self.popupCtrl:SetMovable(on)
+  -- self.popupCtrl:SetMouseEnabled(on)
 
   if on then
     BC._savedPopupText = self.popupLabel:GetText()
@@ -110,6 +111,8 @@ function BC:OnAddOnLoaded(_, addonName)
   SV = ZO_SavedVars:NewAccountWide("BombCounterSV", 1, nil, defaults)
   SV.bombThreshold = tonumber(SV.bombThreshold) or defaults.bombThreshold
   SV.bombWindowMs  = tonumber(SV.bombWindowMs)  or defaults.bombWindowMs
+  SV.popupTextSize = tonumber(SV.popupTextSize) or defaults.popupTextSize
+  SV.nameSource    = SV.nameSource or defaults.nameSource
   SV.bombScope     = SV.bombScope or "all"
 
   -- 2) Grab XML controls
@@ -127,6 +130,8 @@ function BC:OnAddOnLoaded(_, addonName)
   BC.popupCtrl:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, SV.popupX, SV.popupY)
   BC:ToggleLock(SV.unlocked)
   BC:TogglePopupDrag(SV.popupMovable)
+
+  BC.popupLabel:SetFont(string.format("%s|%d|thick-outline", "$(BOLD_FONT)", SV.popupTextSize))
 
   -- 4) Slash commands
   SLASH_COMMANDS["/bombtest"] = function() BC:TestBomb() end
@@ -154,9 +159,14 @@ EVENT_MANAGER:RegisterForEvent(
 function BC:OnKillFeed(_, killLocation,
                       srcDisp, srcChar, srcAlliance, srcRank,
                       tgtDisp, tgtChar, tgtAlliance, tgtRank)
-  -- normalize
-  local src = (srcChar ~= "" and NormalizeName(srcChar)) or srcDisp or "<unknown>"
-  local tgt = (tgtChar ~= "" and NormalizeName(tgtChar)) or tgtDisp or "<unknown>"
+    -- normalize character vs. account name for **any** player
+  local charSrc = (srcChar ~= "" and NormalizeName(srcChar)) or srcDisp or "<unknown>"
+  local accSrc  = NormalizeName(srcDisp) or srcDisp or "<unknown>"
+  local src     = (SV.nameSource == "account") and accSrc or charSrc
+
+  local charTgt = (tgtChar ~= "" and NormalizeName(tgtChar)) or tgtDisp or "<unknown>"
+  local accTgt  = NormalizeName(tgtDisp) or tgtDisp or "<unknown>"
+  local tgt     = (SV.nameSource == "account") and accTgt or charTgt
 
   -- 1) scope filtering
   if SV.bombScope == "self" then
@@ -213,7 +223,10 @@ end
 
 -- Manual test
 function BC:TestBomb()
-  local name   = NormalizeName(GetUnitName("player")) or "You"
+  local name = (SV.nameSource == "account")
+             and NormalizeName( GetUnitDisplayName("player") )
+             or NormalizeName( GetUnitName("player"))
+  name = name or "You"
   local all    = GetUnitAlliance("player")
   local hex    = ({ [1]="EFD93D",[2]="DE5B4E",[3]="4F81BD" })[all] or "FFFFFF"
   local msg    = string.format("|c%s%s|r made a %d-kill Bomb!", hex, name, SV.bombThreshold)
@@ -261,13 +274,26 @@ function BC:CreateSettingsMenu(LAM)
       width    = "half",
     },
     {
+      type  = "dropdown",
+      name  = "Name Preference",
+      choices = {"Character", "Account"},
+      getFunc = function() 
+        return (SV.nameSource == "account") and "Account" or "Character"
+      end,
+      setFunc = function(v)
+        SV.nameSource = (v == "Account") and "account" or "character"
+      end,
+      width = "half"
+    },
+    {
       type="checkbox", name="Unlock History Panel",
       getFunc = function() return SV.unlocked end,
       setFunc = function(v) BC:ToggleLock(v) end,
     },
     {
-      type="button", name="Toggle Popup Move",
-      func    = function() BC:TogglePopupDrag(not SV.popupMovable) end,
+      type="checkbox", name="Moveaable Popup Window",
+      getFunc = function() return SV.popupMovable end,
+      setFunc = function(v) BC:TogglePopupDrag(v) end
     },
     {
       type="slider", name="Bomb Popup window (ms)", min=500, max=10000, step=100,
@@ -284,5 +310,13 @@ function BC:CreateSettingsMenu(LAM)
       getFunc = function() return SV.historyLimit end,
       setFunc = function(v) SV.historyLimit = v; BC:AddHistory("") end,
     },
-  })
+    {
+      type="slider", name="Popup Text Size", min=25, max=50, step=1,
+      getFunc = function() return SV.popupTextSize end,
+      setFunc = function(v) 
+        SV.popupTextSize = v  
+        BC.popupLabel:SetFont( string.format("%s|%d|thick-outline", "$(BOLD_FONT)", v) )
+      end
+    }
+  })     
 end
