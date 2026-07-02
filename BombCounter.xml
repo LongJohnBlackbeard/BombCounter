@@ -1,69 +1,83 @@
 <GuiXml>
     <Controls>
-      <!-- History panel -->
-      <TopLevelControl name="BT_HistoryContainer"
-                       mouseEnabled="true"
-                       movable="true"
-                       clampedToScreen="true">
-        <Dimensions x="400" y="400"/>
-        <Anchor point="TOPLEFT"
-                relativeTo="GuiRoot"
-                relativePoint="TOPLEFT"
-                offsetX="20" offsetY="200"/>
-        <OnMoveStop>BT_HistoryContainer_MoveStop()</OnMoveStop>
-        <Controls>
-          <Backdrop name="$(parent)_BG"
-                    inherits="ZO_ThinBackdrop"
-                    edgeColor="000000"
-                    centerColor="000000"
-                    alpha="0.5">
-            <AnchorFill/>
-          </Backdrop>
-          <Label name="$(parent)_HistoryLabel"
-                 font="ZoFontChat"
-                 color="CFDCBD"
-                 wrapMode="WORD_WRAP"
-                 verticalAlignment="TOP"
-                 horizontalAlignment="LEFT">
-            <Anchor point="TOPLEFT"
-                    relativeTo="$(parent)_BG"
-                    relativePoint="TOPLEFT"
-                    offsetX="10" offsetY="10"/>
-            <Dimensions x="380" y="380"/>
-          </Label>
-        </Controls>
-      </TopLevelControl>
-  
-      <!-- Popup panel -->
-      <TopLevelControl name="BT_BombPopup"
-                       hidden="true"
-                       mouseEnabled="true"
-                       movable="true"
-                       clampedToScreen="true">
-        <Dimensions x="800" y="200"/>
-        <Anchor point="TOPLEFT"
-                relativeTo="GuiRoot"
-                relativePoint="TOPLEFT"
-                offsetX="300" offsetY="60"/>
-        <OnMoveStop>BT_BombPopup_MoveStop()</OnMoveStop>
-        <Controls>
-          <Backdrop name="$(parent)_BG"
-                    inherits="ZO_ThinBackdrop"
-                    edgeColor="000000"
-                    centerColor="000000"
-                    alpha="0.5">
-            <AnchorFill/>
-          </Backdrop>
-          <Label name="BT_BombPopupLabel"
-                 font="$(BOLD_FONT)|32|thick-outline"
-                 horizontalAlignment="CENTER"
-                 verticalAlignment="CENTER"
-                 color="FFFFFF"
-                 wrapMode="CLIP">
-            <AnchorFill/>
-          </Label>
-        </Controls>
-      </TopLevelControl>
+        <Control name="BT_HistoryRow" virtual="true" resizeToFitDescendents="false">
+            <Dimensions y="44"/>
+            <Controls>
+                <Backdrop name="$(parent)_BG" inherits="ZO_DefaultBackdrop" edgeColor="1F1F1F" centerColor="050505" alpha="0.75">
+                    <AnchorFill/>
+                </Backdrop>
+                <Texture name="$(parent)_Accent" textureFile="EsoUI/Art/Miscellaneous/white.dds">
+                    <Dimensions x="4"/>
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT"/>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT"/>
+                </Texture>
+                <Label name="$(parent)_Count" font="$(BOLD_FONT)|22|soft-shadow-thick" horizontalAlignment="CENTER" verticalAlignment="CENTER">
+                    <Dimensions x="46"/>
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)_Accent" relativePoint="TOPRIGHT" offsetX="2"/>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$(parent)_Accent" relativePoint="BOTTOMRIGHT" offsetX="2"/>
+                </Label>
+                <Label name="$(parent)_Time" font="$(CHAT_FONT)|14|soft-shadow-thin" color="A8A8A8" horizontalAlignment="RIGHT" verticalAlignment="CENTER">
+                    <Dimensions x="62"/>
+                    <Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-8"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-8"/>
+                </Label>
+                <Label name="$(parent)_Message" font="$(CHAT_FONT)|18|soft-shadow-thin" color="FFFFFF" wrapMode="ELLIPSIS" verticalAlignment="CENTER">
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)_Count" relativePoint="TOPRIGHT" offsetX="4"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)_Time" relativePoint="BOTTOMLEFT" offsetX="-6"/>
+                </Label>
+            </Controls>
+        </Control>
+
+        <TopLevelControl name="BT_HistoryContainer" hidden="true" mouseEnabled="false" movable="false" clampedToScreen="true">
+            <Dimensions x="520" y="64"/>
+            <Anchor point="TOPLEFT" relativeTo="GuiRoot" relativePoint="TOPLEFT" offsetX="20" offsetY="200"/>
+            <OnMoveStop>BT_HistoryContainer_MoveStop()</OnMoveStop>
+            <Controls>
+                <Backdrop name="$(parent)_BG" inherits="ZO_DefaultBackdrop" edgeColor="595959" centerColor="060606" alpha="0.72">
+                    <AnchorFill/>
+                </Backdrop>
+                <Label name="$(parent)_Title" text="BOMB FEED" font="$(BOLD_FONT)|18|soft-shadow-thick" color="EFD93D">
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="12" offsetY="10"/>
+                </Label>
+                <Label name="$(parent)_MoveHint" text="Drag to reposition" hidden="true" font="$(CHAT_FONT)|14|soft-shadow-thin" color="A8A8A8">
+                    <Anchor point="LEFT" relativeTo="$(parent)_Title" relativePoint="RIGHT" offsetX="12"/>
+                </Label>
+                <Button name="$(parent)_Clear" inherits="ZO_DefaultButton" hidden="true">
+                    <Dimensions x="74" y="26"/>
+                    <Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-8" offsetY="5"/>
+                </Button>
+                <Control name="$(parent)_Rows">
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="8" offsetY="38"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-8" offsetY="-8"/>
+                </Control>
+            </Controls>
+        </TopLevelControl>
+
+        <TopLevelControl name="BT_BombPopup" hidden="true" mouseEnabled="false" movable="false" clampedToScreen="true">
+            <Dimensions x="980" y="140"/>
+            <Anchor point="TOPLEFT" relativeTo="GuiRoot" relativePoint="TOPLEFT" offsetX="300" offsetY="60"/>
+            <OnMoveStop>BT_BombPopup_MoveStop()</OnMoveStop>
+            <Controls>
+                <Backdrop name="$(parent)_BG" inherits="ZO_DefaultBackdrop" edgeColor="EFD93D" centerColor="060606" alpha="0.82">
+                    <AnchorFill/>
+                </Backdrop>
+                <Texture name="$(parent)_Accent" textureFile="EsoUI/Art/Miscellaneous/white.dds" color="EFD93D">
+                    <Dimensions x="7"/>
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT"/>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT"/>
+                </Texture>
+                <Label name="$(parent)_Tier" text="BOMB" font="$(BOLD_FONT)|16|soft-shadow-thick" color="EFD93D">
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="86" offsetY="15"/>
+                </Label>
+                <Label name="$(parent)_Count" text="#" font="$(BOLD_FONT)|38|soft-shadow-thick" color="EFD93D" horizontalAlignment="CENTER" verticalAlignment="CENTER">
+                    <Dimensions x="68" y="108"/>
+                    <Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="12"/>
+                </Label>
+                <Label name="$(parent)_Message" font="$(BOLD_FONT)|30|soft-shadow-thick" color="FFFFFF" wrapMode="WORD_WRAP" verticalAlignment="CENTER">
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)_Tier" relativePoint="BOTTOMLEFT" offsetY="2"/>
+                    <Anchor point="BOTTOMRIGHT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-20" offsetY="-12"/>
+                </Label>
+            </Controls>
+        </TopLevelControl>
     </Controls>
-  </GuiXml>
-  
+</GuiXml>

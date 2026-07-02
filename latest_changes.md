@@ -1,7 +1,9 @@
-## Version 0.2.1 
-### *2025-07-29*
+## Version 0.3.0
+### *2026-06-30*
 ```txt
-- Ability to choose whether to display account names or character names
-- Consistant toggle buttons in the addon control panel
-- Ability to change text size of the popup message
+- Redesigned popup and persistent feed with escalating visual tiers
+- Character, Account, and Character (@Account) display modes
+- Five editable count-based message templates
+- Independent output controls, optional sound, previews, and improved settings
+- ESO API 101050 support without changes to kill counting logic
 ```

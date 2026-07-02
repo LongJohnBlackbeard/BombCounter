@@ -1,9 +1,12 @@
-## APIVersion:     101046
+## APIVersion:     101050
 ## Title:          Bomb Counter
 ## Author:         Alphatrazz
-## Version:        0.1.2
-## DependsOn:      LibAddonMenu-2.0>=38 LibScrollableMenu>=020305
+## Version:        0.3.0
+## AddOnVersion:   30000
+## DependsOn:      LibAddonMenu-2.0>=43
 ## SavedVariables: BombCounterSV
 
 BombCounter.lua
+BombCounter_UI.lua
+BombCounter_Settings.lua
 BombCounter.xml
